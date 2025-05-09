@@ -1,0 +1,28 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Sample data loading (replace with your actual data loading)
+data = pd.read_csv('your_air_quality_data.csv')
+
+# Handle missing values (example: imputation with mean)
+data = data.fillna(data.mean())
+
+# Feature engineering (example: creating hour of the day)
+data['timestamp'] = pd.to_datetime(data['timestamp'])
+data['hour'] = data['timestamp'].dt.hour
+
+# Select features and target variable
+features = ['temperature', 'humidity', 'wind_speed', 'hour', 'PM2.5_lag1'] # Example features
+target = 'PM2.5' # Example target pollutant
+
+X = data[features]
+y = data[target]
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Scale numerical features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
